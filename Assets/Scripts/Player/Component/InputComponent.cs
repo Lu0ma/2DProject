@@ -8,10 +8,12 @@ public class InputComponent : MonoBehaviour
     InputAction moveAction = null;
     InputAction jumpAction = null;
     InputAction attackAction = null;
+    InputAction dashAction = null;
 
     public InputAction MoveAction => moveAction;
     public InputAction JumpAction => jumpAction;
     public InputAction AttackAction => attackAction;
+    public InputAction DashAction => dashAction;
 
 
     private void Awake()
@@ -27,5 +29,7 @@ public class InputComponent : MonoBehaviour
         jumpAction.Enable();
         attackAction = controls.Player.Attack;
         attackAction.Enable();
+        dashAction = controls.Player.Dash;
+        dashAction.Enable();
     }
 }
