@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,8 +6,12 @@ public class MovementComponent : MonoBehaviour
     InputComponent inputs = null;
     Rigidbody2D playerRigidBody = null;
     Detection detection = null;
+    [Header("-----Animation-----")]
+    [SerializeField] Animator animator = null;
+
 
     [Header("-----Variable-----")]
+    [SerializeField] bool isFacingRight = true;
     [SerializeField] float moveSpeed = 2.0f;
 
     [SerializeField] float jumpForce = 16.0f;
@@ -23,6 +26,7 @@ public class MovementComponent : MonoBehaviour
     [SerializeField] float currentDirection = 0.0f;
     float originalGravity;
 
+    public Animator Animator => animator;
     public bool CanJump { get => canJump; set { canJump = value; } }
     private void Start()
     {
@@ -46,17 +50,28 @@ public class MovementComponent : MonoBehaviour
         inputs.DashAction.performed += Dash;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (inputs.MoveAction.ReadValue<float>() == 0 || isDashing) return;
+        animator.SetBool("IsFalling", detection.IsFalling);
+        animator.SetBool("IsJumping", detection.IsJumping);
+
+        if (isDashing) return;
+
         Move(inputs.MoveAction.ReadValue<float>());
     }
 
     private void Move(float _direction)
     {
-        transform.parent.position += new Vector3(_direction * moveSpeed * Time.deltaTime, 0.0f, 0.0f);
-        transform.localScale = new Vector3(_direction * 3.0f, _direction * 3.0f, 1.0f);
+        transform.parent.position += new Vector3(_direction * moveSpeed * Time.fixedDeltaTime, 0.0f, 0.0f);
+        isFacingRight = _direction > 0 ? true : _direction < 0 ? false : isFacingRight;
+        if (_direction != 0)
+            transform.localScale = new Vector3(_direction * -5.0f, 5.0f, 1.0f);
+        else 
+            transform.localScale = isFacingRight ? new Vector3((_direction + 1.0f) * -5.0f , 5.0f, 1.0f) : new Vector3((_direction - 1.0f) * -5.0f, 5.0f, 1.0f);
         currentDirection = _direction;
+        animator.SetFloat("Direction", Mathf.Abs(_direction));
+
+
     }
 
     private void Jump(InputAction.CallbackContext _context)
@@ -64,6 +79,8 @@ public class MovementComponent : MonoBehaviour
         if (!canJump || isDashing) return;
         playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, jumpForce);
         canJump = false;
+        detection.IsJumping = true;
+
     }
 
     private void Attack(InputAction.CallbackContext _context)
@@ -74,10 +91,11 @@ public class MovementComponent : MonoBehaviour
         if (!canDash) return;
         canDash = false;
         isDashing = true;
+        animator.SetBool("IsDashing", isDashing);
         //No gravity
         playerRigidBody.gravityScale = 0.0f;
         //Dash speed
-        playerRigidBody.velocity = new Vector2(currentDirection * dashForce, 0.0f);
+        playerRigidBody.velocity = new Vector2(Mathf.Clamp(-transform.localScale.x, -1, 1) * dashForce, 0.0f);
 
         Invoke(nameof(ResetGravity), dashTime);
         Invoke(nameof(ResetCanDash), dashCooldown);
@@ -89,6 +107,8 @@ public class MovementComponent : MonoBehaviour
         playerRigidBody.gravityScale = originalGravity;
         playerRigidBody.velocity = new Vector2(0.0f, 0.0f);
         isDashing = false;
+        animator.SetBool("IsDashing", isDashing);
+
     }
     private void ResetCanDash()
     {

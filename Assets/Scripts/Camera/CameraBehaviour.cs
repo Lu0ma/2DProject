@@ -1,10 +1,11 @@
 using UnityEngine;
-
+using Math = Utils.Math;
 enum CameraType
 {
     STATIC,
     DYNAMIC
 };
+
 public class CameraBehaviour : MonoBehaviour
 {
     [Header("-----Variable------")]
@@ -17,14 +18,24 @@ public class CameraBehaviour : MonoBehaviour
     private void Start()
     {
         //Vector3 _camera = Camera.current.ScreenToViewportPoint(Camera.current.WorldToScreenPoint(transform.position));
-        cameraPosition = new Vector3(.5f, 0.0f, 0.0f); 
-        cameraOffset = new Vector3(0.0f, transform.position.y - 3.5f, transform.position.z);
+        cameraPosition = new Vector3(0.0f, 0.0f, 0.0f); 
+        cameraOffset = new Vector3(0.0f, transform.position.y - 3.0f, transform.position.z);
     }
 
     // Update is called once per frame
     private void LateUpdate()
     {
-        CameraFollowPlayer();
+        switch(cameraType)
+        {
+            case CameraType.STATIC:
+                //put the position to the target of the camera
+                break;
+            case CameraType.DYNAMIC:
+                CameraFollowPlayer();
+                break;
+        default:
+            break;
+        }
     }
 
     private void CameraFollowPlayer()
@@ -35,8 +46,8 @@ public class CameraBehaviour : MonoBehaviour
             print("CameraBehaviour -> No Player Instantiate !");
             return;
         }
-        MoveCamera();
-        //MoveCameraToPlayerLeftRight();
+        //MoveCamera();
+        MoveCameraToPlayerLeftRight();
         //MoveCameraToPlayerUpDown();
 
     }
@@ -44,16 +55,16 @@ public class CameraBehaviour : MonoBehaviour
     {
         transform.position = Vector3.Lerp(transform.position, playerGO.transform.position + playerGO.transform.localScale.x * 1.0f * cameraPosition + cameraOffset, Time.deltaTime * cameraMoveSpeed);
     }
-    
-    //void MoveCameraToPlayerLeftRight()
-    //{
-    //    if (Math.Distance(transform.position.x, playerGO.transform.position.x) < 1.1f 
-    //        ||
-    //        Math.Distance(transform.position.x, playerGO.transform.position.x) > -1.1f)
-    //    {
-    //        MoveCamera();
-    //    }
-    //}
+
+    void MoveCameraToPlayerLeftRight()
+    {
+        if (Math.Distance(transform.position.x, playerGO.transform.position.x) < 1.1f
+            ||
+            Math.Distance(transform.position.x, playerGO.transform.position.x) > -1.1f)
+        {
+            MoveCamera();
+        }
+    }
 
     //void MoveCameraToPlayerUpDown()
     //{
@@ -61,7 +72,7 @@ public class CameraBehaviour : MonoBehaviour
     //    if (Math.Distance(transform.position.y, playerGO.transform.position.y) > 2.6f
     //        ||
     //        Math.Distance(transform.position.y, playerGO.transform.position.y) < -0.0f)
-        
+
     //        MoveCamera();
     //    }
     //}

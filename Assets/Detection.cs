@@ -3,8 +3,10 @@ using UnityEngine;
 public class Detection : MonoBehaviour
 {
     MovementComponent movement = null;
-    [SerializeField] bool isGrounded = true;
-    public bool IsGrounded { get => isGrounded; set { isGrounded = value; } }
+    [SerializeField] bool isFalling = false;
+    [SerializeField] bool isJumping= false;
+    public bool IsFalling { get => isFalling; set { isFalling = value; } }
+    public bool IsJumping { get => isJumping; set { isJumping = value; } }
 
     private void Start()
     {
@@ -14,6 +16,7 @@ public class Detection : MonoBehaviour
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            isFalling = false;
             movement.CanJump = true;
         }
     }
@@ -25,8 +28,11 @@ public class Detection : MonoBehaviour
         }
     }
 
+    //Allow the player to jump later after falling
     private void JumpAnnulation()
     {
+        isFalling = true;        
         movement.CanJump = false;
+        isJumping = false;
     }
 }
