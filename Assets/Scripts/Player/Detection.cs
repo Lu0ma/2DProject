@@ -12,7 +12,7 @@ public class Detection : MonoBehaviour
     {
         movement = transform.parent.GetComponentInChildren<MovementComponent>();
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
@@ -24,7 +24,7 @@ public class Detection : MonoBehaviour
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            Invoke(nameof(JumpAnnulation), 0.3f);
+            JumpAnnulation();
         }
     }
 

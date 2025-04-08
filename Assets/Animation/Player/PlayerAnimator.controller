@@ -166,7 +166,7 @@ AnimatorStateMachine:
     m_Position: {x: 600, y: -90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7888742216316876684}
-    m_Position: {x: 690, y: 40, z: 0}
+    m_Position: {x: 700, y: 40, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -344,7 +344,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Body
+  m_Name: PlayerAnimator
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Direction
@@ -777,7 +777,7 @@ AnimatorState:
   m_Motion: {fileID: 7400000, guid: 301d41d0a58421c4a8f34a6a8cfb121e, type: 2}
   m_Tag: 
   m_SpeedParameter: 
-  m_MirrorParameter: 
+  m_MirrorParameter: IsJumping
   m_CycleOffsetParameter: 
   m_TimeParameter: 
 --- !u!1101 &7966656525159150888

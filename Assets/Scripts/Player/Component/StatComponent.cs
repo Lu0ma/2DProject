@@ -16,6 +16,8 @@ public class StatComponent : MonoBehaviour
 
     [SerializeField] bool isDead = false;
 
+    [SerializeField] int currentMoney = 0;
+
     private void Start()
     {
         movement = GetComponent<MovementComponent>();

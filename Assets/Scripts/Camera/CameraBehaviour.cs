@@ -10,7 +10,7 @@ public class CameraBehaviour : MonoBehaviour
 {
     [Header("-----Variable------")]
     [SerializeField] GameObject playerGO = null;
-    [SerializeField] float cameraMoveSpeed = 2.0f;
+    [SerializeField] float cameraMoveSpeed = 2.5f;
     [SerializeField] Vector3 cameraPosition = Vector3.zero;
     [SerializeField] Vector3 cameraOffset = Vector3.zero;
     [SerializeField] CameraType cameraType = CameraType.DYNAMIC;
@@ -18,12 +18,12 @@ public class CameraBehaviour : MonoBehaviour
     private void Start()
     {
         //Vector3 _camera = Camera.current.ScreenToViewportPoint(Camera.current.WorldToScreenPoint(transform.position));
-        cameraPosition = new Vector3(0.0f, 0.0f, 0.0f); 
+        cameraPosition = new Vector3(-0.75f, 0.0f, 0.0f); 
         cameraOffset = new Vector3(0.0f, transform.position.y - 3.0f, transform.position.z);
     }
 
     // Update is called once per frame
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         switch(cameraType)
         {
@@ -37,6 +37,7 @@ public class CameraBehaviour : MonoBehaviour
             break;
         }
     }
+    
 
     private void CameraFollowPlayer()
     {
