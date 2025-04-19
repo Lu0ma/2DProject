@@ -1,5 +1,5 @@
 using UnityEngine;
-using Math = Utils.Math;
+//using Math = Utils.Math;
 enum CameraType
 {
     STATIC,
@@ -9,17 +9,17 @@ enum CameraType
 public class CameraBehaviour : MonoBehaviour
 {
     [Header("-----Variable------")]
-    [SerializeField] GameObject playerGO = null;
-    [SerializeField] float cameraMoveSpeed = 2.5f;
+    [SerializeField] GameObject spriteCharacter = null;
+    [SerializeField] float cameraHorizontalMoveSpeed = 5.0f;
+    [SerializeField] float cameraVerticalMoveSpeed = 5.0f;
     [SerializeField] Vector3 cameraPosition = Vector3.zero;
     [SerializeField] Vector3 cameraOffset = Vector3.zero;
     [SerializeField] CameraType cameraType = CameraType.DYNAMIC;
+    Transform parent;
     // Start is called before the first frame update  
     private void Start()
     {
-        //Vector3 _camera = Camera.current.ScreenToViewportPoint(Camera.current.WorldToScreenPoint(transform.position));
-        cameraPosition = new Vector3(-0.75f, 0.0f, 0.0f); 
-        cameraOffset = new Vector3(0.0f, transform.position.y - 3.0f, transform.position.z);
+        parent = spriteCharacter.transform.parent;
     }
 
     // Update is called once per frame
@@ -41,31 +41,35 @@ public class CameraBehaviour : MonoBehaviour
 
     private void CameraFollowPlayer()
     {
-        //Early return if the player prefab is not instantiate
-        if (!playerGO)
-        {
-            print("CameraBehaviour -> No Player Instantiate !");
-            return;
-        }
-        //MoveCamera();
-        MoveCameraToPlayerLeftRight();
+        //slow camera for Horizontal deplacement
+        MoveCameraHorizontal();
+
+        //fast camera for Vertical deplacement
+        MoveCameraVertical();
+
+        //Idée à la poubelle...
+        //MoveCameraToPlayerLeftRight();
         //MoveCameraToPlayerUpDown();
-
     }
-    private void MoveCamera()
+    private void MoveCameraHorizontal()
     {
-        transform.position = Vector3.Lerp(transform.position, playerGO.transform.position + playerGO.transform.localScale.x * 1.0f * cameraPosition + cameraOffset, Time.deltaTime * cameraMoveSpeed);
+        transform.position = new Vector3(Mathf.Lerp(transform.position.x, parent.position.x + parent.localScale.x * -1.0f * cameraPosition.x + cameraOffset.x, Time.deltaTime * cameraHorizontalMoveSpeed),transform.position.y, transform.position.z);
     }
 
-    void MoveCameraToPlayerLeftRight()
+    private void MoveCameraVertical()
     {
-        if (Math.Distance(transform.position.x, playerGO.transform.position.x) < 1.1f
-            ||
-            Math.Distance(transform.position.x, playerGO.transform.position.x) > -1.1f)
-        {
-            MoveCamera();
-        }
+        transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, parent.position.y + parent.localScale.y * -1.0f * cameraPosition.y + cameraOffset.y, Time.deltaTime * cameraVerticalMoveSpeed), transform.position.z);
     }
+
+    //void MoveCameraToPlayerLeftRight()
+    //{
+    //    if (Math.Distance(transform.position.x, sprite.transform.parent.position.x) < 1.1f
+    //        ||
+    //        Math.Distance(transform.position.x, sprite.transform.parent.position.x) > -1.1f)
+    //    {
+    //        MoveCamera();
+    //    }
+    //}
 
     //void MoveCameraToPlayerUpDown()
     //{

@@ -26,6 +26,7 @@ public class MovementComponent : MonoBehaviour
     [SerializeField] float currentDirection = 0.0f;
     float originalGravity;
 
+
     public Animator Animator => animator;
     public bool CanJump { get => canJump; set { canJump = value; } }
     private void Start()
@@ -40,7 +41,7 @@ public class MovementComponent : MonoBehaviour
     {
         inputs = GetComponent<InputComponent>();
         playerRigidBody = GetComponentInParent<Rigidbody2D>();
-        detection = transform.parent.GetComponentInChildren<Detection>();
+        detection = transform.GetComponentInChildren<Detection>();
     }
 
     private void BindEvent()
@@ -52,8 +53,8 @@ public class MovementComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        animator.SetBool("IsFalling", detection.IsFalling);
         animator.SetBool("IsJumping", detection.IsJumping);
+        animator.SetBool("IsFalling", detection.IsFalling);
 
         if (isDashing) return;
 
@@ -62,15 +63,15 @@ public class MovementComponent : MonoBehaviour
 
     private void Move(float _direction)
     {
-        transform.parent.position += new Vector3(_direction * moveSpeed * Time.fixedDeltaTime, 0.0f, 0.0f);
-        isFacingRight = _direction > 0 ? true : _direction < 0 ? false : isFacingRight;
-        if (_direction != 0)
-            transform.localScale = new Vector3(_direction * -5.0f, 5.0f, 1.0f);
+        float _dir = _direction > 0 ? 1 : _direction < 0 ? -1 : _direction;
+        transform.position += new Vector3(_dir * moveSpeed * Time.fixedDeltaTime, 0.0f, 0.0f);
+        isFacingRight = _dir > 0 ? true : _dir < 0 ? false : isFacingRight;
+        if (_dir != 0)
+            transform.localScale = new Vector3(_dir * 1.0f, 1.0f, 1.0f);
         else 
-            transform.localScale = isFacingRight ? new Vector3((_direction + 1.0f) * -5.0f , 5.0f, 1.0f) : new Vector3((_direction - 1.0f) * -5.0f, 5.0f, 1.0f);
-        currentDirection = _direction;
-        animator.SetFloat("Direction", Mathf.Abs(_direction));
-
+            transform.localScale = isFacingRight ? new Vector3((_dir + 1.0f) * 1.0f , 1.0f, 1.0f) : new Vector3((_dir - 1.0f) * 1.0f, 1.0f, 1.0f);
+        currentDirection = _dir;
+        animator.SetFloat("Direction", Mathf.Abs(_dir));
 
     }
 
@@ -78,8 +79,8 @@ public class MovementComponent : MonoBehaviour
     {
         if (!canJump || isDashing) return;
         playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, jumpForce);
-        canJump = false;
         detection.IsJumping = true;
+        canJump = false;
 
     }
 
@@ -95,7 +96,7 @@ public class MovementComponent : MonoBehaviour
         //No gravity
         playerRigidBody.gravityScale = 0.0f;
         //Dash speed
-        playerRigidBody.velocity = new Vector2(Mathf.Clamp(-transform.localScale.x, -1, 1) * dashForce, 0.0f);
+        playerRigidBody.velocity = new Vector2(Mathf.Clamp(transform.localScale.x, -1, 1) * dashForce, 0.0f);
 
         Invoke(nameof(ResetGravity), dashTime);
         Invoke(nameof(ResetCanDash), dashCooldown);

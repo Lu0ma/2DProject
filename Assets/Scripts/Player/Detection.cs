@@ -4,7 +4,7 @@ public class Detection : MonoBehaviour
 {
     MovementComponent movement = null;
     [SerializeField] bool isFalling = false;
-    [SerializeField] bool isJumping= false;
+    [SerializeField] bool isJumping = false;
     public bool IsFalling { get => isFalling; set { isFalling = value; } }
     public bool IsJumping { get => isJumping; set { isJumping = value; } }
 
@@ -18,6 +18,7 @@ public class Detection : MonoBehaviour
         {
             isFalling = false;
             movement.CanJump = true;
+            isJumping = false;
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -33,6 +34,5 @@ public class Detection : MonoBehaviour
     {
         isFalling = true;        
         movement.CanJump = false;
-        isJumping = false;
     }
 }
