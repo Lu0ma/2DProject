@@ -9,11 +9,13 @@ public class InputComponent : MonoBehaviour
     InputAction jumpAction = null;
     InputAction attackAction = null;
     InputAction dashAction = null;
+    InputAction grappleAction = null;
 
     public InputAction MoveAction => moveAction;
     public InputAction JumpAction => jumpAction;
     public InputAction AttackAction => attackAction;
     public InputAction DashAction => dashAction;
+    public InputAction GrappleAction => grappleAction;
 
 
     private void Awake()
@@ -31,5 +33,7 @@ public class InputComponent : MonoBehaviour
         attackAction.Enable();
         dashAction = controls.Player.Dash;
         dashAction.Enable();
+        grappleAction = controls.Player.Grapple;
+        grappleAction.Enable();
     }
 }
