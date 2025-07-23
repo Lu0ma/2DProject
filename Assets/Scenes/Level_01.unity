@@ -2080,6 +2080,10 @@ PrefabInstance:
       propertyPath: m_UpdateMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3152557159777653101, guid: 606b9f722eda607439871d5687e0264a, type: 3}
+      propertyPath: grapplingMaxRange
+      value: 5.1
+      objectReference: {fileID: 0}
     - target: {fileID: 5797703631849738477, guid: 606b9f722eda607439871d5687e0264a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2102,7 +2106,7 @@ PrefabInstance:
       objectReference: {fileID: 4531052327962005529, guid: 974de02db166d4b4eb7096fdb475b808, type: 3}
     - target: {fileID: 8631113964810509161, guid: 606b9f722eda607439871d5687e0264a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.846314
+      value: -7.9
       objectReference: {fileID: 0}
     - target: {fileID: 8631113964810509161, guid: 606b9f722eda607439871d5687e0264a, type: 3}
       propertyPath: m_LocalPosition.y
