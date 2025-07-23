@@ -11,8 +11,9 @@ public class StatComponent : MonoBehaviour
 
     public bool IsDead { get => isDead; set => isDead = value; }
     public int CurrentLife { get => currentLife; set => currentLife = value; }
+    public int MaxLife { get => maxLife; set => maxLife = value; }
 
-    private bool VerifyLife()
+	private bool VerifyLife()
     {
         isDead = currentLife > 0 ? false : true;
         //movement.Animator.SetBool("IsDead", isDead);
